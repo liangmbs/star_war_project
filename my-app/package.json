@@ -6,7 +6,11 @@
     "react-scripts": "0.6.1"
   },
   "dependencies": {
-    "graphiql": "^0.7.8"
+    "babel-preset-react": "^6.16.0",
+    "babelify": "^7.3.0",
+    "graphiql": "^0.7.8",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
