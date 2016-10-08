@@ -10,7 +10,10 @@
     "babelify": "^7.3.0",
     "graphiql": "^0.7.8",
     "react": "^15.3.2",
-    "react-dom": "^15.3.2"
+    "react-bootstrap": "^0.30.5",
+    "react-dom": "^15.3.2",
+    "react-dropdown": "^1.1.0",
+    "react-select": "^1.0.0-rc.2"
   },
   "scripts": {
     "start": "react-scripts start",
