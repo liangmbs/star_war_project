@@ -59,32 +59,28 @@ var App = React.createClass({
             searchResults: response.results.data.allPeople.people
         });
     },
-    /* AJAX get
+    // AJAX get
     search: function(URL){
         $.ajax({
             type: "GET",
             contentType: "application/jsonp; charset=utf-8",
             crossDomain: true,
-            jsonpCallback: 'logResults',
-            dataType: 'JSONP',
-            data:{},
+            jsonp: "callback",
+            jsonpCallback: 'jsonpCallback',
+            dataType: 'JSON',
             url: URL,
-            success: function(data){
-                console.log(data);
-                this.showResult(data);
-            }
-        })
-    },
-    */
-    //get method
-    search: function(URL){
-        $.get(URL, function(result){
-            var name = result.data.allPeople.people[0];
-            console.log(result);
-        }.bind(this));
+            success: function(json){
+                if(json.flag==="successfully"){
+                    console.log("request successfully");
+                    this.showResult(json);
+                }
+            },
+            error: function(xhr, status, error)
+                {console.log(xhr);}
+        });
     },
     
-    
+
     /*
     search:function(URL){
         $.getJSON(URL, function(result){
@@ -92,6 +88,7 @@ var App = React.createClass({
         });
     },
     */
+    
     /* GRAPHQL get
     search: function(URL){
         return fetch(window.location.origin, {
