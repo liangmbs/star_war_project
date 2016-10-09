@@ -14,7 +14,6 @@ var App = React.createClass({
         this.setState({
             searchResults: response.results
         });
-        console.log(response.results.data)
     },
     
     search: function(URL){
@@ -31,23 +30,24 @@ var App = React.createClass({
     render: function(){
         return (
             <div>
-                <searchBox search={this.search} />
+                <SearchBox search={this.search} />
+                <Result searchResults={this.state.searchResults} />
             </div>
-        )
-    },
-    
+        );
+    }
+
+//testing the connection
+/*    
     componentDidMount(){
             this.search('http://graphql-swapi.parseapp.com/?query={%20allPeople{%20people{%20name%20}%20}%20}');
     }
+*/ 
 });
 
-
-/*
 var SearchBox = React.createClass({    
     render: function(){
         return (
             <div>
-                <input type="text" ref="query" />
                 <input type="submit" onClick={this.createAjax} />
             </div>
         );
@@ -56,12 +56,33 @@ var SearchBox = React.createClass({
     createAjax: function(){
         var query    = '{%20allPeople{%20people{%20name%20}%20}%20}';
         var URL      = 'http://graphql-swapi.parseapp.com/?query=' + query;
-        App.search(URL)
+        this.props.search(URL)
     }
 });
 
 
 
-*/
+var Result = React.createClass({
+    render: function(){
+        var resultItems = this.props.searchResults.map(function(result){
+            return <ResultItem name={result.allPeople.people} />
+        });
+        return (
+            <ul>
+                {resultItems}
+            </ul>
+        );
+    }
+});
+
+
+
+var ResultItem = React.createClass({
+    render: function(){
+        return <li> {this.props.name} </li>;   
+    }
+});
+
+
 
 export default App;
