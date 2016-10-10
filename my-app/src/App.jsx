@@ -60,27 +60,34 @@ var App = React.createClass({
         });
     },
     // AJAX get
+    
     search: function(URL){
+
         $.ajax({
             type: "GET",
-            contentType: "application/jsonp; charset=utf-8",
-            crossDomain: true,
-            jsonp: "callback",
-            jsonpCallback: 'jsonpCallback',
             dataType: 'JSON',
-            url: URL,
+            url: 'http://localhost:3000/people',
             success: function(json){
-                if(json.flag==="successfully"){
-                    console.log("request successfully");
-                    this.showResult(json);
-                }
-            },
-            error: function(xhr, status, error)
-                {console.log(xhr);}
+                console.log(json.data);   
+            }
         });
     },
     
-
+    
+    //call local server
+    /*
+    search: function(URL){      
+        var xhr = XMLHttpRequest();
+        xhr.onload = function(){
+            alert(xhr.responseText);
+        };
+        xhr.open('GET', 'http://localhost:3000/proxy?'+URL, true);
+        xhr.send("f=json")
+    },
+                            
+    
+    */
+    
     /*
     search:function(URL){
         $.getJSON(URL, function(result){
@@ -122,7 +129,7 @@ var SearchBox = React.createClass({
     createAjax: function(){
         var query    = '{%20allPeople{%20people{%20name%20}%20}%20}';
         var URL      = 'http://graphql-swapi.parseapp.com/?query=' + query;
-        this.props.search(URL)
+        this.props.search(URL);
     }
 });
 
