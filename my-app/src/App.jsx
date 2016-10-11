@@ -1,149 +1,147 @@
 import React from 'react';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 import $ from '../node_modules/jquery';
- 
-//var invocation = new XHLHttpRequest();
 
 
-/*
-var App = React.createClass({
-    
-    createCORSRequest: function(method, url){
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr){
-            xhr.open(method, url, true);
-        } else if (typeof XDomainRequest != "undefined"){
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-        } else {
-            xhr = null;
-        }
-        return xhr;
-    }
-})
+var options = [
+    { value: 'one', label: 'One' },
+    { value: 'two', label: 'Two' }
+];
 
+var people1 = "";
+var people2 = "";
 
-var request = createCORSRequest("get", "http://graphql-swapi.parseapp.com/?query={%20allPeople{%20people{%20name%20}%20}%20}");
-if (request){
-    request.onload = function() {
-    
-    };
-    request.onreadystatechange = handler;
-    request.send();
-                xhrFields: {
-                withCredentials: true  
-            },
-}
-
-*/
-
-var App = React.createClass({
-    
+var App = React.createClass({   
     getInitialState: function(){
         return {
             searchResults: []
         }
     },
-    /*
-    callotherDomain; function(URL){
-         if(invocation){
-            invocation.open('GET', URL, true);
-            invocation.setRequestHeader('Content-Type', 'application/json')
-            invocation.onreadystatechange = handler;
-            invocation.send();
-        }
-    }
-    */
+    
     showResult: function(response){
         console.log(response);
         this.setState({
-            searchResults: response.results.data.allPeople.people
+            searchResults: response
+                
         });
     },
-    // AJAX get
     
+    // AJAX get
     search: function(URL){
-
-        $.ajax({
+         $.ajax({
+            data:"JSON",
             type: "GET",
-            dataType: 'JSON',
-            url: 'http://localhost:3000/people',
-            success: function(json){
-                console.log(json.data);   
+            url: URL,
+            success: function(data){
+                //this.setState(data);
+                //this.showReuslt(data);
+                console.log(data);
+            },
+            error: function(xhr, status, err){
+                console.log(this.props.url, status, err.toString);  
             }
         });
     },
+
     
-    
-    //call local server
-    /*
-    search: function(URL){      
-        var xhr = XMLHttpRequest();
-        xhr.onload = function(){
-            alert(xhr.responseText);
-        };
-        xhr.open('GET', 'http://localhost:3000/proxy?'+URL, true);
-        xhr.send("f=json")
-    },
-                            
-    
-    */
-    
-    /*
-    search:function(URL){
-        $.getJSON(URL, function(result){
-           console.log(result);       
-        });
-    },
-    */
-    
-    /* GRAPHQL get
-    search: function(URL){
-        return fetch(window.location.origin, {
-            method: 'get',
-            header: {'Content-Type': 'application/json'},
-            body: JSON.stringify(URL),
-        }).then(response => response.json();)
-    },
-        */
     render: function(){
         return (
             <div>
+                <SearchPeople1 />
+                <SearchPeople2 />
                 <SearchBox search={this.search} />
                 <Result searchResults={this.state.searchResults} />
             </div>
         );
     }
-
-
 });
 
-var SearchBox = React.createClass({    
+var SearchPeople1 = React.createClass({
+    
+    getInitialState: function(){
+        return{
+            state: {value: 'one'}
+        }
+    },            
+    
+    logChange: function(val){
+        this.setState({value:val});
+        people1 = val;
+        console.log(people1);
+    },
     render: function(){
+        return (
+            <div>
+                <Select
+                    name="form-field-name"
+                    value={this.state.value}
+                    options={options}
+                    onChange={this.logChange}
+                />
+            </div>
+        );   
+    }
+    
+});
+
+var SearchPeople2 = React.createClass({
+    
+    getInitialState: function(){
+        return{
+            state: {value: 'one'}
+        }
+    },            
+    
+    logChange: function(val){
+        this.setState({value:val});
+        people2 = val;
+        console.log(people2);
+    },
+    
+    render: function(){
+        return (
+            <div>
+                <Select
+                    name="form-field-name"
+                    value={this.state.value}
+                    options={options}
+                    onChange={this.logChange}
+                />
+            </div>
+        );
+        
+    }   
+});
+
+
+var SearchBox = React.createClass({ 
+    
+    
+     render: function(){
         return (
             <div>
                 <input type="submit" onClick={this.createAjax} />
             </div>
         );
+        
     },
 
     createAjax: function(){
-        var query    = '{%20allPeople{%20people{%20name%20}%20}%20}';
-        var URL      = 'http://graphql-swapi.parseapp.com/?query=' + query;
+        var URL = 'http://graphql-swapi.parseapp.com/?query={%20allPeople{%20people{%20name%20}%20}%20}';
         this.props.search(URL);
     }
 });
 
-
-
 var Result = React.createClass({
     render: function(){
-        var resultItems = this.props.searchResults.map(function(result){
-            return <ResultItem name={result.allPeople.people} />
+         var resultItems = this.props.searchResults.map(function(result) {
+            return <ResultItem key={result.trackId} trackName={result.trackName} />
         });
-        return (
+        return(
             <ul>
                 {resultItems}
-            </ul>
+            </ul>           
         );
     }
 });
